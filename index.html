@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aaron Charous</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,700&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0e0d0b;
+      --surface: #161512;
+      --border: #2a2820;
+      --cream: #f0ead6;
+      --muted: #7a7263;
+      --accent: #e8a44a;
+      --accent2: #4ab8a8;
+      --accent3: #d45f5f;
+      --text: #ddd5be;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease, width 0.15s ease, height 0.15s ease, background 0.2s ease;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(232,164,74,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+    }
+    body:hover .cursor { opacity: 1; }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.028;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    nav.scrolled {
+      border-color: var(--border);
+      background: rgba(14,13,11,0.85);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--cream);
+      letter-spacing: -0.01em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 3rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(232,164,74,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,164,74,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+    }
+
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    .orb-1 {
+      width: 600px; height: 600px;
+      background: var(--accent);
+      top: -200px; right: -100px;
+      animation: orbFloat 12s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: var(--accent2);
+      bottom: 0; left: -100px;
+      animation: orbFloat 16s ease-in-out infinite reverse;
+    }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -20px) scale(1.05); }
+      66% { transform: translate(-20px, 15px) scale(0.97); }
+    }
+
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s ease forwards;
+    }
+
+    .hero-name {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      font-weight: 900;
+      line-height: 0.9;
+      color: var(--cream);
+      letter-spacing: -0.03em;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.35s ease forwards;
+    }
+    .hero-name .name-italic {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent);
+    }
+
+    .hero-tagline-wrap {
+      margin-top: 2rem;
+      height: 2.5rem;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.55s ease forwards;
+    }
+    .hero-tagline {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--muted);
+      transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.5s ease;
+    }
+
+    .hero-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-top: 4rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.7s ease forwards;
+    }
+    .hero-location {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+    .hero-scroll-hint {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 6rem 3rem; }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      max-width: 200px;
+    }
+
+    /* ─── ABOUT ─── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .about-left { position: relative; }
+    .about-big-text {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--cream);
+      letter-spacing: -0.02em;
+    }
+    .about-big-text em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .about-right {
+      padding-top: 4.5rem;
+    }
+    .about-body p {
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      line-height: 1.8;
+    }
+    .about-body p strong {
+      color: var(--cream);
+      font-weight: 500;
+    }
+    .fun-fact-box {
+      margin-top: 2rem;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 1.25rem 1.5rem;
+      background: var(--surface);
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .fun-fact-box:hover { border-left-color: var(--accent2); background: #1a1915; }
+    .fun-fact-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .fun-fact-text {
+      font-size: 0.92rem;
+      color: var(--text);
+      font-style: italic;
+    }
+    .fun-fact-hint {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--muted);
+      margin-top: 0.75rem;
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── RESEARCH ─── */
+    #research {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .research-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+    }
+    .research-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: -0.02em;
+    }
+    .research-title em { color: var(--accent); font-style: italic; }
+
+    .papers-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      border-top: 1px solid var(--border);
+    }
+    .paper-item {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 2rem;
+      align-items: start;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+      cursor: pointer;
+      position: relative;
+      text-decoration: none;
+      color: inherit;
+    }
+    .paper-item::before {
+      content: '';
+      position: absolute;
+      left: -3rem;
+      top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transition: transform 0.25s ease;
+    }
+    .paper-item:hover::before { transform: scaleY(1); }
+    .paper-item:hover { background: rgba(232,164,74,0.03); }
+    .paper-year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      padding-top: 0.2rem;
+      letter-spacing: 0.05em;
+    }
+    .paper-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.4;
+      margin-bottom: 0.5rem;
+    }
+    .paper-venue {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+    .paper-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border-radius: 2px;
+      border: 1px solid;
+      white-space: nowrap;
+      align-self: start;
+    }
+    .badge-siam { color: var(--accent2); border-color: var(--accent2); }
+    .badge-acoustics { color: #7eb8d4; border-color: #7eb8d4; }
+    .badge-rl { color: var(--accent3); border-color: var(--accent3); }
+    .badge-optics { color: #a08fdf; border-color: #a08fdf; }
+
+    /* ─── WORK ─── */
+    #work { max-width: 900px; }
+    .work-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: -0.02em;
+      margin-bottom: 3rem;
+    }
+    .work-title em { color: var(--accent); font-style: italic; }
+    .work-item {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 3rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .work-item:first-of-type { border-top: 1px solid var(--border); }
+    .work-meta {
+      padding-top: 0.2rem;
+    }
+    .work-company {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .work-period {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .work-role {
+      font-family: 'Fraunces', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+    .work-desc {
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.75;
+    }
+    .work-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--muted);
+    }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      text-align: center;
+      padding: 8rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-bg-text {
+      position: absolute;
+      font-family: 'Fraunces', serif;
+      font-size: clamp(6rem, 18vw, 16rem);
+      font-weight: 900;
+      color: rgba(240,234,214,0.025);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      pointer-events: none;
+      letter-spacing: -0.04em;
+      user-select: none;
+    }
+    .contact-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .contact-heading {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 900;
+      color: var(--cream);
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+    }
+    .contact-heading em { color: var(--accent); font-style: italic; }
+    .contact-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 3rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .contact-links {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      padding: 1rem 1.75rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-link::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+      z-index: -1;
+    }
+    .contact-link:hover {
+      color: var(--bg);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .contact-link:hover::before { transform: scaleX(1); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 2rem 3rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-name {
+      font-family: 'Fraunces', serif;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .footer-built {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--border);
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      #hero { padding: 0 1.5rem 4rem; }
+      section { padding: 4rem 1.5rem; }
+      #about { grid-template-columns: 1fr; gap: 3rem; }
+      .about-right { padding-top: 0; }
+.paper-item { grid-template-columns: 1fr; gap: 0.75rem; }
+      .paper-badge { display: none; }
+      .work-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+      body { cursor: auto; }
+      .cursor, .cursor-ring { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Nav -->
+  <nav id="nav">
+    <span class="nav-logo">AC</span>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="https://www.linkedin.com/in/aaron-charous/" target="_blank" rel="noopener" title="LinkedIn">Li</a></li>
+      <li><a href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener" title="Google Scholar">GS</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-grid-lines"></div>
+    <div class="hero-orb orb-1"></div>
+    <div class="hero-orb orb-2"></div>
+
+    <div class="hero-eyebrow" id="heroEyebrow"><!-- randomized --></div>
+
+    <h1 class="hero-name">
+      Aaron<br /><span class="name-italic">Charous</span>
+    </h1>
+
+    <div class="hero-tagline-wrap">
+      <div class="hero-tagline" id="heroTagline"><!-- randomized --></div>
+    </div>
+
+    <div class="hero-bottom">
+      <div class="hero-location" id="heroLocation"><!-- randomized --></div>
+      <div class="hero-scroll-hint">
+        <div class="scroll-line"></div>
+        <span>scroll</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="about-left reveal">
+      <div class="section-label">About</div>
+      <div class="about-big-text">
+        Scientist.<br />
+        Builder.<br />
+        <em>Occasionally<br />correct.</em>
+      </div>
+    </div>
+    <div class="about-right reveal" style="transition-delay:0.15s">
+      <div class="about-body">
+        <p>
+          Hi, I'm Aaron — a <strong>scientific computing person</strong> who studied applied math at <strong>Brown</strong>,
+          where I got into terahertz optics and leaky waveguides before pivoting to graduate work at <strong>MIT</strong>.
+          There I spent a lot of time making PDEs behave themselves and convincing neural networks to
+          refine finite element meshes and adaptively reduce the rank of numerical solutions to
+          deterministic and stochastic differential equations. Mixed results across the board.
+        </p>
+        <p>
+          These days I work as a quant at <strong>IMC Trading</strong> in Chicago, applying the same
+          mathematical thinking to problems that move considerably faster than ocean waves.
+          It's a different kind of uncertainty quantification.
+        </p>
+        <p>
+          My academic research sat at the intersection of <strong>numerical linear algebra</strong>,
+          <strong>model-order reduction</strong>, and <strong>time integration along nonlinear manifolds</strong>.
+          These days my interests have drifted toward <strong>statistical machine learning</strong> and <strong>optimization</strong>.
+          Also the occasional ill-advised research rabbit hole.
+        </p>
+      </div>
+      <div class="fun-fact-box" id="funFactBox" onclick="rotateFunFact()" title="click for another">
+        <div class="fun-fact-label">Random Fact #<span id="factNum">1</span></div>
+        <div class="fun-fact-text" id="funFactText">Loading...</div>
+        <div class="fun-fact-hint">↻ click to rotate</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Research -->
+  <section>
+    <div id="research" style="max-width:1100px;margin:0 auto;">
+      <div class="section-label reveal">Research</div>
+      <div class="research-header reveal">
+        <h2 class="research-title">Some things I<br /><em>wrote down</em></h2>
+      </div>
+
+      <div class="papers-grid">
+
+        <a class="paper-item reveal" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2024</div>
+          <div>
+            <div class="paper-title">Range-dynamical low-rank split-step Fourier method for the parabolic wave equation</div>
+            <div class="paper-venue">The Journal of the Acoustical Society of America — A. Charous, P.F.J. Lermusiaux</div>
+          </div>
+          <span class="paper-badge badge-acoustics">Acoustics</span>
+        </a>
+
+        <a class="paper-item reveal" style="transition-delay:0.03s" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2024</div>
+          <div>
+            <div class="paper-title">Stable rank-adaptive dynamically orthogonal Runge–Kutta schemes</div>
+            <div class="paper-venue">SIAM Journal on Scientific Computing — A. Charous, P.F.J. Lermusiaux</div>
+          </div>
+          <span class="paper-badge badge-siam">Appl. Math</span>
+        </a>
+
+        <a class="paper-item reveal" style="transition-delay:0.06s" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2023</div>
+          <div>
+            <div class="paper-title">Deep reinforcement learning for adaptive mesh refinement</div>
+            <div class="paper-venue">Journal of Computational Physics — C. Foucart, A. Charous, P.F.J. Lermusiaux</div>
+          </div>
+          <span class="paper-badge badge-rl">RL</span>
+        </a>
+
+        <a class="paper-item reveal" style="transition-delay:0.09s" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2023</div>
+          <div>
+            <div class="paper-title">Dynamically orthogonal Runge–Kutta schemes with perturbative retractions for the dynamical low-rank approximation</div>
+            <div class="paper-venue">SIAM Journal on Scientific Computing — A. Charous, P.F.J. Lermusiaux</div>
+          </div>
+          <span class="paper-badge badge-siam">Appl. Math</span>
+        </a>
+
+        <a class="paper-item reveal" style="transition-delay:0.12s" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2023</div>
+          <div>
+            <div class="paper-title">A wide-area deep ocean floor mapping system: Design and sea tests</div>
+            <div class="paper-venue">Geomatics — P. Ryu, D. Brown, K. Arsenault, A. Charous et al.</div>
+          </div>
+          <span class="paper-badge badge-acoustics">Acoustics</span>
+        </a>
+
+        <a class="paper-item reveal" style="transition-delay:0.15s" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2023</div>
+          <div>
+            <div class="paper-title">MSEAS-ParEq for Coupled Ocean-Acoustic Modeling Around the Globe</div>
+            <div class="paper-venue">OCEANS 2023 MTS/IEEE — W.H. Ali, A. Charous, C. Mirabito et al.</div>
+          </div>
+          <span class="paper-badge badge-acoustics">Acoustics</span>
+        </a>
+
+        <a class="paper-item reveal" style="transition-delay:0.18s" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2023</div>
+          <div>
+            <div class="paper-title">Gaussian Beam Migration for Wide-Area Deep Ocean Floor Mapping</div>
+            <div class="paper-venue">OCEANS 2023 MTS/IEEE — A. Charous, W.H. Ali, P. Ryu et al.</div>
+          </div>
+          <span class="paper-badge badge-acoustics">Acoustics</span>
+        </a>
+
+        <a class="paper-item reveal" style="transition-delay:0.21s" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2022</div>
+          <div>
+            <div class="paper-title">Incremental Low-Rank Dynamic Mode Decomposition for Efficient Forecast Dissemination and Onboard Forecasting</div>
+            <div class="paper-venue">OCEANS 2022, Hampton Roads — T. Ryu, W.H. Ali, A. Charous et al.</div>
+          </div>
+          <span class="paper-badge badge-siam">Appl. Math</span>
+        </a>
+
+        <a class="paper-item reveal" style="transition-delay:0.24s" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2022</div>
+          <div>
+            <div class="paper-title">Stochastic acoustic ray tracing with dynamically orthogonal differential equations</div>
+            <div class="paper-venue">OCEANS 2022, Hampton Roads — M.J. Humara, W.H. Ali, A. Charous et al.</div>
+          </div>
+          <span class="paper-badge badge-acoustics">Acoustics</span>
+        </a>
+
+        <a class="paper-item reveal" style="transition-delay:0.27s" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2021</div>
+          <div>
+            <div class="paper-title">Dynamically Orthogonal Differential Equations for Stochastic and Deterministic Reduced-Order Modeling of Ocean Acoustic Wave Propagation</div>
+            <div class="paper-venue">OCEANS 2021 Conference — A. Charous, P.F.J. Lermusiaux</div>
+          </div>
+          <span class="paper-badge badge-acoustics">Acoustics</span>
+        </a>
+
+        <a class="paper-item reveal" style="transition-delay:0.3s" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2020</div>
+          <div>
+            <div class="paper-title">Single-shot link discovery for terahertz wireless networks</div>
+            <div class="paper-venue">Nature Communications — Y. Ghasempour, R. Shrestha, A. Charous, E. Knightly, D.M. Mittleman</div>
+          </div>
+          <span class="paper-badge badge-optics">Optics</span>
+        </a>
+
+        <a class="paper-item reveal" style="transition-delay:0.33s" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2019</div>
+          <div>
+            <div class="paper-title">Characteristics of resonance-induced optical vortices and spatial reshaping</div>
+            <div class="paper-venue">Optics Letters — W. Zhang, A. Charous, M. Nagai, D.M. Mittleman, R. Mendis</div>
+          </div>
+          <span class="paper-badge badge-optics">Optics</span>
+        </a>
+
+        <a class="paper-item reveal" style="transition-delay:0.36s" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2018</div>
+          <div>
+            <div class="paper-title">Extraordinary optical reflection resonances and bound states in the continuum from a periodic array of thin metal plates</div>
+            <div class="paper-venue">Optics Express — W. Zhang, A. Charous, M. Nagai, D.M. Mittleman, R. Mendis</div>
+          </div>
+          <span class="paper-badge badge-optics">Optics</span>
+        </a>
+
+        <a class="paper-item reveal" style="transition-delay:0.39s" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <div class="paper-year">2018</div>
+          <div>
+            <div class="paper-title">Characterizing optical resonances using spatial mode reshaping</div>
+            <div class="paper-venue">Optica — W. Zhang, A. Charous, M. Nagai, D.M. Mittleman, R. Mendis</div>
+          </div>
+          <span class="paper-badge badge-optics">Optics</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Work -->
+  <section id="work">
+    <div class="section-label reveal">Experience</div>
+    <h2 class="work-title reveal">Where I've been<br /><em>causing trouble</em></h2>
+
+    <div class="work-item reveal">
+      <div class="work-meta">
+        <div class="work-company">IMC Trading</div>
+        <div class="work-period">Feb 2024 — Present</div>
+      </div>
+      <div>
+        <div class="work-role">Quantitative Researcher</div>
+        <div class="work-desc">
+          Applying numerical methods and algorithmic thinking to quantitative problems in Chicago.
+          The time scales are different from academic research. Everything else is surprisingly familiar.
+        </div>
+        <div class="work-tags">
+          <span class="tag">Quantitative Research</span>
+          <span class="tag">Chicago, IL</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item reveal" style="transition-delay:0.07s">
+      <div class="work-meta">
+        <div class="work-company">Meta · Reality Labs</div>
+        <div class="work-period">Jun–Dec 2023</div>
+      </div>
+      <div>
+        <div class="work-role">Research Scientist Intern</div>
+        <div class="work-desc">
+          Elastodynamic simulations in real-time for soft body interactions at Reality Labs in Redmond.
+          Turns out making virtual objects feel physically plausible is a hard problem.
+        </div>
+        <div class="work-tags">
+          <span class="tag">Elastodynamics</span>
+          <span class="tag">Real-Time Simulation</span>
+          <span class="tag">Redmond, WA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item reveal" style="transition-delay:0.14s">
+      <div class="work-meta">
+        <div class="work-company">MIT · MSEAS Lab</div>
+        <div class="work-period">Aug 2019 — Jun 2023</div>
+      </div>
+      <div>
+        <div class="work-role">Graduate Student Researcher</div>
+        <div class="work-desc">
+          Worked in the Multidisciplinary Simulation, Estimation, and Assimilation Systems lab
+          on reduced-order modeling applied to ocean phenomena: computational acoustics,
+          fluid mechanics, and optimal path planning. Also taught neural networks to decide
+          when a finite element mesh needs more triangles.
+        </div>
+        <div class="work-tags">
+          <span class="tag">DO Methods</span>
+          <span class="tag">Ocean Acoustics</span>
+          <span class="tag">Deep RL</span>
+          <span class="tag">Cambridge, MA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item reveal" style="transition-delay:0.21s">
+      <div class="work-meta">
+        <div class="work-company">IMC Trading</div>
+        <div class="work-period">Jun–Aug 2018</div>
+      </div>
+      <div>
+        <div class="work-role">Quantitative Trading Intern</div>
+        <div class="work-desc">
+          Delta One trading desk. First exposure to the idea that math could also be
+          a day job.
+        </div>
+        <div class="work-tags">
+          <span class="tag">Delta One</span>
+          <span class="tag">Chicago, IL</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item reveal" style="transition-delay:0.28s">
+      <div class="work-meta">
+        <div class="work-company">Brown · Mittleman Lab</div>
+        <div class="work-period">Jan 2017 — May 2019</div>
+      </div>
+      <div>
+        <div class="work-role">Terahertz Optics Researcher</div>
+        <div class="work-desc">
+          Studied terahertz beam behavior on arrays of parallel-plate waveguides.
+          Formulated mathematical models for transmission and reflection and built analytical models
+          using ray optics. Came away with strong opinions about LaTeX.
+        </div>
+        <div class="work-tags">
+          <span class="tag">Terahertz Optics</span>
+          <span class="tag">Subwavelength Waveguides</span>
+          <span class="tag">Providence, RI</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item reveal" style="transition-delay:0.35s">
+      <div class="work-meta">
+        <div class="work-company">Brown · Dept. of Applied Math</div>
+        <div class="work-period">Sep–Dec 2016</div>
+      </div>
+      <div>
+        <div class="work-role">Undergraduate Teaching Assistant</div>
+        <div class="work-desc">
+          TA for Applied Ordinary Differential Equations. Turns out explaining something is
+          the fastest way to realize you don't understand it.
+        </div>
+        <div class="work-tags">
+          <span class="tag">ODEs</span>
+          <span class="tag">Teaching</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section id="education" style="max-width:900px;">
+    <div class="section-label reveal">Education</div>
+    <h2 class="work-title reveal">Where I <em>learned</em><br />to be confused</h2>
+
+    <div class="work-item reveal">
+      <div class="work-meta">
+        <div class="work-company">MIT</div>
+        <div class="work-period">Feb 2021 — May 2023</div>
+      </div>
+      <div>
+        <div class="work-role">PhD, Mechanical Engineering & Computational Science</div>
+        <div class="work-desc">
+          Dissertation on high-order retractions for reduced-order modeling and uncertainty quantification.
+          Spent a lot of time on manifolds. Not the hiking kind or the car kind.
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item reveal" style="transition-delay:0.08s">
+      <div class="work-meta">
+        <div class="work-company">MIT</div>
+        <div class="work-period">Sep 2019 — Jan 2021</div>
+      </div>
+      <div>
+        <div class="work-role">SM, Computational Science & Engineering</div>
+        <div class="work-desc">
+          The warm-up act.
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item reveal" style="transition-delay:0.16s">
+      <div class="work-meta">
+        <div class="work-company">Brown University</div>
+        <div class="work-period">2015 — 2019</div>
+      </div>
+      <div>
+        <div class="work-role">ScB, Applied Mathematics & Engineering</div>
+        <div class="work-desc">
+          Where it all started — terahertz optics, differential equations, and a degree that let me
+          claim to be a mathematician to physicists, a physicist to engineers, and an imposter to pure mathematicians.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="contact-bg-text">Hello</div>
+    <div class="reveal">
+      <div class="contact-eyebrow">Let's talk</div>
+      <h2 class="contact-heading">I don't bite.<br /><em>Usually.</em></h2>
+      <p class="contact-sub">Hit me up about research, quant stuff, numerical methods, or literally anything else.</p>
+      <div class="contact-links">
+        <a class="contact-link" href="https://www.linkedin.com/in/aaron-charous/" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+        <a class="contact-link" href="https://scholar.google.com/citations?user=14mC1o0AAAAJ&hl=en" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>
+          Scholar
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-name">Aaron Charous © <span id="footerYear"></span></div>
+    <div class="footer-built">Vibe-coded · No frameworks harmed</div>
+  </footer>
+
+  <script>
+    // ─── CURSOR ───
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+    });
+
+    function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button, .fun-fact-box, .paper-item').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '20px';
+        cursor.style.height = '20px';
+        ring.style.width = '60px';
+        ring.style.height = '60px';
+        ring.style.opacity = '0.5';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '10px';
+        cursor.style.height = '10px';
+        ring.style.width = '36px';
+        ring.style.height = '36px';
+        ring.style.opacity = '1';
+      });
+    });
+
+    // ─── NAV SCROLL ───
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ─── RANDOM CONTENT ───
+    const taglines = [
+      "Physicist by training, quant by paycheck.",
+      "I make matrices do embarrassing things.",
+      "PDEs solved. Markets: still working on it.",
+      "Numerically stable. Emotionally: TBD.",
+      "Stochastic by day. Deterministic never.",
+      "Made eigenvalues my personality.",
+      "Orthogonal to expectations.",
+      "Reduced-order model of a human.",
+      "My residuals are smaller than my regrets.",
+      "Convergent. In theory.",
+    ];
+
+    const eyebrows = [
+      "↳ Scientific Computing Enjoyer",
+      "↳ Recovering Physicist",
+      "↳ Matrix Whisperer",
+      "↳ PDE Wrangler @ Chicago",
+      "↳ Professional Approximator",
+    ];
+
+    const locations = [
+      "📍 Chicago, IL — probably cold right now",
+      "📍 Chicago, IL — wind is a constant",
+      "📍 Chicago, IL — ex-Cambridge transplant",
+      "📍 Chicago, IL — MIT → IMC pipeline",
+    ];
+
+    const facts = [
+      "My dissertation involved solving PDEs on manifolds that change shape over time. No, I can't explain it at a party either.",
+      "We taught a neural network to decide when a finite element mesh needs more triangles. It was smarter than we expected.",
+      "I've published papers on terahertz wireless networks, ocean acoustics, and low-rank tensor approximations. Versatile or indecisive? You decide.",
+      "The word 'orthogonal' appears in my publications more times than 'the'. Possibly.",
+      "I went from simulating ocean wave propagation at MIT to... trading. The waves got faster.",
+      "Dynamically Orthogonal methods are my love language. If you know, you know. If you don't, ask me.",
+      "I speak English and Spanish. My code speaks Python and regret.",
+      "At MIT I worked on problems where the solution space itself evolves in time. The market does the same thing, but more personally.",
+      "Bound states in the continuum are weird photonic phenomena where a wave is somehow localized but also shouldn't be. I still think about them.",
+      "Yes, Runge-Kutta is named after two people. Carle and Martin. We don't talk about Martin.",
+    ];
+
+    // pick random each load
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+    document.getElementById('heroTagline').textContent = pick(taglines);
+    document.getElementById('heroEyebrow').textContent = pick(eyebrows);
+    document.getElementById('heroLocation').textContent = pick(locations);
+
+    let factIndex = Math.floor(Math.random() * facts.length);
+
+    function showFact() {
+      document.getElementById('funFactText').textContent = facts[factIndex];
+      document.getElementById('factNum').textContent = factIndex + 1;
+    }
+
+    function rotateFunFact() {
+      factIndex = (factIndex + 1) % facts.length;
+      showFact();
+      const box = document.getElementById('funFactBox');
+      box.style.borderLeftColor = '#4ab8a8';
+      setTimeout(() => box.style.borderLeftColor = '', 300);
+    }
+
+    showFact();
+
+    document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+    // ─── SCROLL REVEAL ───
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(r => obs.observe(r));
+
+    // ─── PAPER ITEMS: ripple on click ───
+    document.querySelectorAll('.paper-item').forEach(item => {
+      item.addEventListener('click', () => {
+        item.style.background = 'rgba(232,164,74,0.06)';
+        setTimeout(() => item.style.background = '', 400);
+      });
+    });
+  </script>
+</body>
+</html>
