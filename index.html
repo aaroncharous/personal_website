@@ -34,6 +34,7 @@
       line-height: 1.6;
       overflow-x: hidden;
       cursor: none;
+      padding-top: env(safe-area-inset-top);
     }
 
     /* ─── CUSTOM CURSOR ─── */
@@ -76,32 +77,23 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      padding: calc(1.5rem + env(safe-area-inset-top)) 3rem 1.5rem;
+      padding-top: max(1.5rem, env(safe-area-inset-top));
+      padding-right: 3rem;
+      padding-bottom: 1.5rem;
+      padding-left: 3rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid transparent;
-      transition: border-color 0.3s;
-      background: transparent;
-    }
-    /* Glass backdrop anchored directly to viewport top so it always
-       covers the safe-area / dynamic-island region above the nav. */
-    nav::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: calc(env(safe-area-inset-top, 0px) + 5rem);
+      transition: border-color 0.3s, background 0.3s;
       background: rgba(14,13,11,0.6);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      transition: background 0.3s;
-      z-index: -1;
-      pointer-events: none;
     }
-    nav.scrolled { border-color: var(--border); }
-    nav.scrolled::before { background: rgba(14,13,11,0.85); }
+    nav.scrolled {
+      border-color: var(--border);
+      background: rgba(14,13,11,0.85);
+    }
     .nav-toggle {
       display: none;
       background: none;
@@ -653,17 +645,16 @@
     /* ─── MOBILE ─── */
     @media (max-width: 768px) {
       nav {
-        padding: calc(0.75rem + env(safe-area-inset-top)) 1.25rem 0.75rem;
-        background: transparent;
-        border-bottom: 1px solid var(--border);
-      }
-      nav::before {
-        height: calc(env(safe-area-inset-top, 0px) + 3.75rem);
+        padding-top: max(0.75rem, env(safe-area-inset-top));
+        padding-right: 1.25rem;
+        padding-bottom: 0.75rem;
+        padding-left: 1.25rem;
         background: rgba(14,13,11,0.7);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--border);
       }
-      nav.scrolled::before { background: rgba(14,13,11,0.85); }
+      nav.scrolled { background: rgba(14,13,11,0.85); }
       .nav-toggle { display: flex; }
       .nav-links {
         position: fixed;
