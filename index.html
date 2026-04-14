@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Aaron Charous</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -74,7 +74,7 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      padding: 1.5rem 3rem;
+      padding: calc(1.5rem + env(safe-area-inset-top)) 3rem 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -601,7 +601,7 @@
     /* ─── MOBILE ─── */
     @media (max-width: 768px) {
       nav {
-        padding: 1rem 1.25rem;
+        padding: calc(1rem + env(safe-area-inset-top)) 1.25rem 1rem;
         background: rgba(14,13,11,0.95);
         border-bottom: 1px solid var(--border);
         backdrop-filter: blur(12px);
@@ -1116,7 +1116,7 @@
     ];
 
     const facts = [
-      "My dissertation involved solving PDEs on manifolds that change shape over time. No, I can't explain it at a party either.",
+      "My dissertation was about integrating along nonlinear manifolds to tractably solve high-dimensional PDEs. No, I can't explain it at a party either.",
       "We taught a neural network to decide when a finite element mesh needs more triangles. It was smarter than we expected.",
       "I've published papers on terahertz wireless networks, ocean acoustics, and low-rank tensor approximations. Versatile or indecisive? You decide.",
       "The word 'orthogonal' appears in my publications more times than 'the'. Possibly.",
