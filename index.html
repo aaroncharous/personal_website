@@ -600,13 +600,23 @@
 
     /* ─── MOBILE ─── */
     @media (max-width: 768px) {
-      nav { padding: 1.25rem 1.5rem; }
-      .nav-links { gap: 1.5rem; }
+      nav {
+        padding: 1rem 1.25rem;
+        background: rgba(14,13,11,0.95);
+        border-bottom: 1px solid var(--border);
+        backdrop-filter: blur(12px);
+      }
+      .nav-links { gap: 1.1rem; }
+      .nav-links a { font-size: 0.68rem; letter-spacing: 0.08em; }
+      .nav-links li:nth-child(4) { display: none; } /* hide Education */
+      .nav-links li:nth-child(5) { display: none; } /* hide Contact */
+      .nav-links li:nth-child(6) { display: none; } /* hide Li */
+      .nav-links li:nth-child(7) { display: none; } /* hide GS */
       #hero { padding: 0 1.5rem 4rem; }
       section { padding: 4rem 1.5rem; }
       #about { grid-template-columns: 1fr; gap: 3rem; }
       .about-right { padding-top: 0; }
-.paper-item { grid-template-columns: 1fr; gap: 0.75rem; }
+      .paper-item { grid-template-columns: 1fr; gap: 0.75rem; }
       .paper-badge { display: none; }
       .work-item { grid-template-columns: 1fr; gap: 0.5rem; }
       footer { flex-direction: column; gap: 0.5rem; text-align: center; }
