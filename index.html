@@ -22,7 +22,7 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
 
     body {
       background: var(--bg);
@@ -486,6 +486,7 @@
       padding: 8rem 3rem;
       position: relative;
       overflow: hidden;
+      max-width: 100%;
     }
     .contact-bg-text {
       position: absolute;
@@ -612,7 +613,7 @@
       .nav-links li:nth-child(5) { display: none; } /* hide Contact */
       .nav-links li:nth-child(6) { display: none; } /* hide Li */
       .nav-links li:nth-child(7) { display: none; } /* hide GS */
-      #hero { padding: 0 1.5rem 4rem; }
+      #hero { padding: 0 1.5rem 4rem; overflow: hidden; max-width: 100%; }
       section { padding: 4rem 1.5rem; }
       #about { grid-template-columns: 1fr; gap: 3rem; }
       .about-right { padding-top: 0; }
