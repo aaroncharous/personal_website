@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0e0d0b" />
   <title>Aaron Charous</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -80,15 +81,27 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid transparent;
-      transition: border-color 0.3s, background 0.3s;
+      transition: border-color 0.3s;
+      background: transparent;
+    }
+    /* Glass backdrop anchored directly to viewport top so it always
+       covers the safe-area / dynamic-island region above the nav. */
+    nav::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: calc(env(safe-area-inset-top, 0px) + 5rem);
       background: rgba(14,13,11,0.6);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
+      transition: background 0.3s;
+      z-index: -1;
+      pointer-events: none;
     }
-    nav.scrolled {
-      border-color: var(--border);
-      background: rgba(14,13,11,0.85);
-    }
+    nav.scrolled { border-color: var(--border); }
+    nav.scrolled::before { background: rgba(14,13,11,0.85); }
     .nav-toggle {
       display: none;
       background: none;
@@ -641,12 +654,16 @@
     @media (max-width: 768px) {
       nav {
         padding: calc(0.75rem + env(safe-area-inset-top)) 1.25rem 0.75rem;
-        background: var(--bg);
+        background: transparent;
         border-bottom: 1px solid var(--border);
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
       }
-      nav.scrolled { background: var(--bg); }
+      nav::before {
+        height: calc(env(safe-area-inset-top, 0px) + 3.75rem);
+        background: rgba(14,13,11,0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+      nav.scrolled::before { background: rgba(14,13,11,0.85); }
       .nav-toggle { display: flex; }
       .nav-links {
         position: fixed;
@@ -655,7 +672,9 @@
         align-items: stretch;
         gap: 0;
         padding: calc(4.5rem + env(safe-area-inset-top)) 0 1rem;
-        background: var(--bg);
+        background: rgba(14,13,11,0.92);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border-bottom: 1px solid var(--border);
         transform: translateY(-100%);
         transition: transform 0.35s ease;
